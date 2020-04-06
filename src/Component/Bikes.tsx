@@ -12,6 +12,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import SpinLoad from './Spinner';
+import Pagination from '@material-ui/lab';
 
 class Bikes extends Component {
     state = {
@@ -20,8 +21,8 @@ class Bikes extends Component {
         apiUrl: 'https://bikewise.org:443/api/v2/incidents',
         titles: [],
         proximity: 'Berlin',
-        startDate: new Date('2014-08-18T21:11:54'),
-        endDate: new Date('2014-08-19T21:11:54'),
+        startDate: new Date('2019-08-18T21:11:54'),
+        endDate: new Date('2019-08-19T21:11:54'),
         loading: false
     }
 
@@ -36,7 +37,7 @@ class Bikes extends Component {
     getIncidents = () => {
         this.setLoading(true)
         this.setState(() => {
-            axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&per_page=${this.state.limit}&proximity=${this.state.proximity}`)
+            axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&proximity=${this.state.proximity}`)
             .then(res => {
                 this.setLoading(false)
                 this.setState({titles: res.data.incidents})
@@ -68,7 +69,7 @@ class Bikes extends Component {
     }
     
     render() {
-        // console.log(this.state.titles);
+        console.log(this.state.titles);
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -108,16 +109,26 @@ class Bikes extends Component {
                     </Grid>
                 </MuiPickersUtilsProvider>
                 <br />
-                {/* {this.state.loading ? <div>Loading...</div> : null} */}
-                <SpinLoad loading={this.state.loading} />
-                {
-                    this.state.titles.map((t: any) =>
-                        <IncidentCard title={t} /> 
-                    )
-                }
-                {
-                    (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
-                }
+                <Grid>
+                    <Grid item>
+                        <div>
+                            Total : {this.state.titles.length}
+                        </div>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <SpinLoad loading={this.state.loading} />
+                    {
+                        this.state.titles.map((t: any) => (
+                            <div key={t.id}>
+                                <IncidentCard title={t} /> 
+                            </div>
+                        ))
+                    }
+                    {
+                        (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
+                    }
+                </Grid>
             </div>
         )
     }
