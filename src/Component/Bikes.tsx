@@ -5,6 +5,7 @@ import axios from 'axios';
 import IncidentCard from './IncidentCard';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Button from '@material-ui/core/Button';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -51,8 +52,13 @@ class Bikes extends Component {
         this.setState({endDate: date})
     }
 
+    handleChange = (e:any) => {
+		console.log(this.state)
+        this.setState({[e.target.name]: e.target.value});
+    }
+    
     render() {
-        console.log(this.state.titles);
+        // console.log(this.state.titles);
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -61,33 +67,34 @@ class Bikes extends Component {
                             margin="normal"
                             name="searchText"
                             value={this.state.searchText}
-                            onChange={this.onTextChange}
+                            onChange={this.handleChange}
                             placeholder="Search for incidents"
                         />
                         <KeyboardDatePicker
-                        disableFuture
-                        margin="normal"
-                        id="start-date"
-                        label="Choose Start Date"
-                        format="MM/dd/yyyy"
-                        value={this.state.startDate}
-                        onChange={this.handleStartDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
+                            disableFuture
+                            margin="normal"
+                            id="start-date"
+                            label="Choose Start Date"
+                            format="MM/dd/yyyy"
+                            value={this.state.startDate}
+                            onChange={this.handleStartDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
                         />
                         <KeyboardDatePicker
-                        disableFuture
-                        margin="normal"
-                        id="end-date"
-                        label="Choose End Date"
-                        format="MM/dd/yyyy"
-                        value={this.state.endDate}
-                        onChange={this.handleEndDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
+                            disableFuture
+                            margin="normal"
+                            id="end-date"
+                            label="Choose End Date"
+                            format="MM/dd/yyyy"
+                            value={this.state.endDate}
+                            onChange={this.handleEndDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
                         />
+                        <Button variant="contained" onClick={this.onTextChange}>Search</Button>
                     </Grid>
                 </MuiPickersUtilsProvider>
                 <br />
