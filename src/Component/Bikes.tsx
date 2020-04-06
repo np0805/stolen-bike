@@ -22,24 +22,37 @@ class Bikes extends Component {
         endDate: new Date('2014-08-19T21:11:54'),
     }
 
-    onTextChange = (e: any) => {
-        this.setState({[e.target.name]: e.target.value}, () => {
-            axios.get(`${this.state.apiUrl}/?query=${this.state.searchText}&per_page=${this.state.limit}&proximity=${this.state.proximity}`)
+    componentDidMount() {
+        this.getIncidents()
+    }
+
+    getIncidents = () => {
+        this.setState(() => {
+            axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&per_page=${this.state.limit}&proximity=${this.state.proximity}`)
             .then(res => this.setState({titles: res.data.incidents}))
             .catch(err => console.log(err));
+        })
+    }
+
+    onTextChange = (e: any) => {
+        console.log(e)
+        this.setState({[e.target.name]: e.target.value}, () => {
+            this.getIncidents()
         });
     }
 
     handleStartDateChange = (date: Date | null) => {
+        console.log(date)
         this.setState({startDate: date})
     }
 
     handleEndDateChange = (date: Date | null) => {
+        console.log(date)
         this.setState({endDate: date})
     }
 
     render() {
-        console.log(this.state);
+        console.log(this.state.titles);
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -52,6 +65,7 @@ class Bikes extends Component {
                             placeholder="Search for incidents"
                         />
                         <KeyboardDatePicker
+                        disableFuture
                         margin="normal"
                         id="start-date"
                         label="Choose Start Date"
@@ -63,6 +77,7 @@ class Bikes extends Component {
                         }}
                         />
                         <KeyboardDatePicker
+                        disableFuture
                         margin="normal"
                         id="end-date"
                         label="Choose End Date"
