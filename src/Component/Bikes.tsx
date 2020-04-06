@@ -12,18 +12,21 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import SpinLoad from './Spinner';
-import Pagination from '@material-ui/lab';
+import MakePage from './MakePage';
 
 class Bikes extends Component {
     state = {
         searchText: '',
-        limit: 10,
         apiUrl: 'https://bikewise.org:443/api/v2/incidents',
         titles: [],
         proximity: 'Berlin',
         startDate: new Date('2019-08-18T21:11:54'),
         endDate: new Date('2019-08-19T21:11:54'),
-        loading: false
+        loading: false,
+
+        currentPage: 1,
+        itemsPerPage: 3,
+        pages: [], 
     }
 
     componentDidMount() {
@@ -34,12 +37,38 @@ class Bikes extends Component {
         this.setState({loading: value})
     }
 
+    getParams = () => {
+        return {
+            limit: this.state.itemsPerPage,
+            page: this.state.currentPage,
+            titles: this.state.titles
+        }
+    }
+
+    paginate = (page: any) => {
+        this.setState({currentPage: page})
+    }
+
+    gotoPage = (page: any) => {
+		const params = this.getParams()
+		params.page = page
+
+        this.setLoading(true)
+        axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&proximity=${this.state.proximity}`)
+            .then(res => {
+                this.setLoading(false)
+                this.setState({titles: res.data.incidents})
+            })
+            .catch(err => console.log(err))
+	}
+
     getIncidents = () => {
         this.setLoading(true)
-        this.setState(() => {
+        this.setState({ currentPage: 1}, () => {
             axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&proximity=${this.state.proximity}`)
             .then(res => {
                 this.setLoading(false)
+                // const pages = [...Array(res.data.incidents).keys()]
                 this.setState({titles: res.data.incidents})
             })
             .catch(err => console.log(err));
@@ -67,9 +96,13 @@ class Bikes extends Component {
 		console.log(this.state)
         this.setState({[e.target.name]: e.target.value});
     }
+
     
     render() {
-        console.log(this.state.titles);
+        let indexOfLastIncident = this.state.currentPage * this.state.itemsPerPage;
+        let indexOfFirstIncident = indexOfLastIncident - this.state.itemsPerPage;
+        let currentIncident = this.state.titles.slice(indexOfFirstIncident, indexOfLastIncident);
+        console.log(this.state);
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -119,7 +152,7 @@ class Bikes extends Component {
                 <Grid>
                     <SpinLoad loading={this.state.loading} />
                     {
-                        this.state.titles.map((t: any) => (
+                        currentIncident.map((t: any) => (
                             <div key={t.id}>
                                 <IncidentCard title={t} /> 
                             </div>
@@ -128,6 +161,7 @@ class Bikes extends Component {
                     {
                         (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
                     }
+                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
                 </Grid>
             </div>
         )
