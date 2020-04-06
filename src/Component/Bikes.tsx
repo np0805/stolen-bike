@@ -11,6 +11,7 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import SpinLoad from './Spinner';
 
 class Bikes extends Component {
     state = {
@@ -21,16 +22,25 @@ class Bikes extends Component {
         proximity: 'Berlin',
         startDate: new Date('2014-08-18T21:11:54'),
         endDate: new Date('2014-08-19T21:11:54'),
+        loading: false
     }
 
     componentDidMount() {
         this.getIncidents()
     }
 
+    setLoading = (value: boolean) => {
+        this.setState({loading: value})
+    }
+
     getIncidents = () => {
+        this.setLoading(true)
         this.setState(() => {
             axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&per_page=${this.state.limit}&proximity=${this.state.proximity}`)
-            .then(res => this.setState({titles: res.data.incidents}))
+            .then(res => {
+                this.setLoading(false)
+                this.setState({titles: res.data.incidents})
+            })
             .catch(err => console.log(err));
         })
     }
@@ -94,16 +104,20 @@ class Bikes extends Component {
                                 'aria-label': 'change date',
                             }}
                         />
-                        <Button variant="contained" onClick={this.onTextChange}>Search</Button>
+                        <Button variant="contained" onClick={this.onTextChange}>Find Cases</Button>
                     </Grid>
                 </MuiPickersUtilsProvider>
                 <br />
+                {/* {this.state.loading ? <div>Loading...</div> : null} */}
+                <SpinLoad loading={this.state.loading} />
                 {
                     this.state.titles.map((t: any) =>
                         <IncidentCard title={t} /> 
                     )
                 }
-                {!this.state.titles.length ? <div> No result</div>: null}
+                {
+                    (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
+                }
             </div>
         )
     }
