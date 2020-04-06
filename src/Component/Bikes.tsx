@@ -15,14 +15,14 @@ class Bikes extends Component {
 
     onTextChange = (e: any) => {
         this.setState({[e.target.name]: e.target.value}, () => {
-            axios.get(`${this.state.apiUrl}/?per_page=${this.state.limit}&proximity=${this.state.proximity}$
-            query=${this.state.searchText}&`).then(res => this.setState({titles: res.data.incidents}))
+            axios.get(`${this.state.apiUrl}/?query=${this.state.searchText}&per_page=${this.state.limit}&proximity=${this.state.proximity}`)
+            .then(res => this.setState({titles: res.data.incidents}))
             .catch(err => console.log(err));
         });
     }
 
     render() {
-        console.log(this.state.titles);
+        console.log(this.state);
         return (
             <div>
                 <TextField
