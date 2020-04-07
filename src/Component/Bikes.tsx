@@ -8,7 +8,6 @@ import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import SpinLoad from './Spinner';
@@ -104,7 +103,7 @@ class Bikes extends Component {
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-around">
+                    <Grid container justify="space-evenly">
                         <TextField
                             margin="normal"
                             name="searchText"
@@ -143,7 +142,7 @@ class Bikes extends Component {
                 </MuiPickersUtilsProvider>
                 <br />
                 <Grid>
-                    <Grid item>
+                    <Grid container item justify="flex-end">
                         <div>
                             Total : {this.state.titles.length}
                         </div>

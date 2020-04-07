@@ -1,23 +1,36 @@
-import React, { Component } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import React from 'react';
+import { Typography, Grid } from '@material-ui/core/';
+import { makeStyles } from '@material-ui/core/styles';
+import logo from './../logo.png';
 
-const Header = () => {
-	return (
-        <div>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography color="inherit">
-                        <h1>Police Department of Berlin</h1>
-                        <br />
-                        <h2>Stolen Bykes</h2>
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-        </div>
-		
-	)
+const HeaderStyles = makeStyles({
+  root: {
+    width: '100%',
+    maxWidth: '80%',
+    marginLeft: '20%',
+    margin: 20,
+  },
+  image: {
+    maxWidth: '150px',
+  }
+});
+
+export default function Header() {
+  const classes = HeaderStyles();
+
+  return (
+    <div className={classes.root}>
+        <Grid container>
+            <img src={logo} className={classes.image} />
+            <Grid>
+                <Typography variant="h2" gutterBottom>
+                    Police Department of Berlin
+                </Typography>
+                <Typography variant="h4" gutterBottom>
+                    Stolen Bykes
+                </Typography>
+            </Grid>
+        </Grid>
+    </div>
+  );
 }
-
-export default Header;

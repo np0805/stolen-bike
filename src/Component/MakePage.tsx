@@ -1,27 +1,10 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme  } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      '& > *': {
-        margin: theme.spacing(1),  
-      },
-    },
-    active: {
-        fontStyle: 'bold',
-        fontWeight: 'bold',
-    }
-  }),
-);
+import MakePageStyles from './MakePageStyles';
 
 const MakePage = (props: any) => {
-    const classes = useStyles();
+    const classes = MakePageStyles();
     const pageNumbers = [];
     const totalItems = props.totalItems;
     const itemsPerPage = props.itemsPerPage;
