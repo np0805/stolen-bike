@@ -24,7 +24,6 @@ class Bikes extends Component {
         endDate: new Date('2019.08.20'),
         startUnix: '',
         endUnix: '',
-        // new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse('2019-08-19T21:11:54')))
         loading: false,
 
         currentPage: 1,
@@ -151,7 +150,7 @@ class Bikes extends Component {
                     {
                         (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
                     }
-                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate}/>
+                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
                 </Grid>
             </div>
         )
