@@ -6,6 +6,16 @@ import useStyles from './IncidentCardStyle';
 const IncidentCard = (props: any) => {
     const classes = useStyles();
     const t = props.title;
+
+    const u = props.title.occurred_at;
+    var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    var day_arr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    var newDate = new Date(u*1000);
+    var date = newDate.getDate();
+    var day = day_arr[newDate.getDay()];
+    var month = months_arr[newDate.getMonth()];
+    var year = newDate.getFullYear();
+
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -25,7 +35,7 @@ const IncidentCard = (props: any) => {
                               {t.description}
                           </Typography>
                           <Typography variant="body2" color="textSecondary">
-                              {t.occurred_at} - {t.address}
+                              {day} {month} {date} {year} - {t.address}
                           </Typography>
                       </Grid>
                     </Grid>
