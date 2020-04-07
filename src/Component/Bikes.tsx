@@ -28,7 +28,7 @@ class Bikes extends Component {
         loading: false,
 
         currentPage: 1,
-        itemsPerPage: 3,
+        itemsPerPage: 10,
         pages: [], 
     }
 

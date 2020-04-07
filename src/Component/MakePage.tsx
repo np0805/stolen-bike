@@ -1,14 +1,21 @@
 import React from 'react'
 import { Pagination, PaginationItem } from '@material-ui/lab/';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme  } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     root: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
       '& > *': {
-        marginTop: theme.spacing(2),
+        margin: theme.spacing(1),  
       },
     },
-}));
+  }),
+);
 
 
 
@@ -25,30 +32,16 @@ const MakePage = (props: any) => {
     }
 
     return (
-        <div>
-            <nav>
-                
-                <ul className="list-group">
-                    <div>
-                        <a onClick={() => paginate(1)} href='!#' className='page-link'>
-                            {"|<"}
-                        </a> 
-                    </div>
-                    <Pagination count={pageNumbers.length} shape="rounded" showFirstButton showLastButton  />
-                    {pageNumbers.map(number => (
-                        <li key={number} className='page-item'>
-                            <a onClick={() => paginate(number)} href='!#' className='page-link'>
-                                {number}
-                            </a>                           
-                        </li>
-                    ))}
-                    <div>
-                        <a onClick={() => paginate(pageNumbers.length)} href='!#' className='page-link'>
-                            {">|"}
-                        </a> 
-                    </div>
-                </ul>
-            </nav>
+        <div className={classes.root}>
+            <ButtonGroup size="small" aria-label="contained primary button group">
+                <Button onClick={() => paginate(1)} href='!#' className="classes.active">{"<< First"}</Button>
+                {pageNumbers.map(number => (
+                    <Button key={number} onClick={() => paginate(number)} href='!#'>
+                        {number}
+                    </Button>
+                ))}
+                <Button onClick={() => paginate(pageNumbers.length)} href='!#'>{"Last >>"}</Button>
+            </ButtonGroup>
         </div>
     )
 }
