@@ -20,8 +20,11 @@ class Bikes extends Component {
         apiUrl: 'https://bikewise.org:443/api/v2/incidents',
         titles: [],
         proximity: 'Berlin',
-        startDate: new Date('2019-08-18T21:11:54'),
-        endDate: new Date('2019-08-19T21:11:54'),
+        startDate: new Date('2019.08.19'),
+        endDate: new Date('2019.08.20'),
+        startUnix: '',
+        endUnix: '',
+        // new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse('2019-08-19T21:11:54')))
         loading: false,
 
         currentPage: 1,
@@ -49,23 +52,10 @@ class Bikes extends Component {
         this.setState({currentPage: page})
     }
 
-    gotoPage = (page: any) => {
-		const params = this.getParams()
-		params.page = page
-
-        this.setLoading(true)
-        axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&proximity=${this.state.proximity}`)
-            .then(res => {
-                this.setLoading(false)
-                this.setState({titles: res.data.incidents})
-            })
-            .catch(err => console.log(err))
-	}
-
     getIncidents = () => {
         this.setLoading(true)
-        this.setState({ currentPage: 1}, () => {
-            axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&proximity=${this.state.proximity}`)
+        this.setState(() => {
+            axios.get(`${this.state.apiUrl}?query=${this.state.searchText}&occurred_before=${this.state.endUnix}&occurred_after=${this.state.startUnix}&proximity=${this.state.proximity}`)
             .then(res => {
                 this.setLoading(false)
                 // const pages = [...Array(res.data.incidents).keys()]
@@ -76,27 +66,27 @@ class Bikes extends Component {
     }
 
     onTextChange = (e: any) => {
-        console.log(e)
         this.setState({[e.target.name]: e.target.value}, () => {
+            this.paginate(1)
             this.getIncidents()
         });
+        console.log(e)
     }
 
     handleStartDateChange = (date: Date | null) => {
         console.log(date)
-        this.setState({startDate: date})
+        this.setState({startDate: date, startUnix: Date.parse(this.state.startDate.toDateString())/1000})
     }
 
     handleEndDateChange = (date: Date | null) => {
         console.log(date)
-        this.setState({endDate: date})
+        this.setState({endDate: date, endUnix: Date.parse(this.state.endDate.toDateString())/1000})
     }
 
     handleChange = (e:any) => {
 		console.log(this.state)
         this.setState({[e.target.name]: e.target.value});
     }
-
     
     render() {
         let indexOfLastIncident = this.state.currentPage * this.state.itemsPerPage;
@@ -119,7 +109,7 @@ class Bikes extends Component {
                             margin="normal"
                             id="start-date"
                             label="Choose Start Date"
-                            format="MM/dd/yyyy"
+                            format="yyyy/MM/dd"
                             value={this.state.startDate}
                             onChange={this.handleStartDateChange}
                             KeyboardButtonProps={{
@@ -131,7 +121,7 @@ class Bikes extends Component {
                             margin="normal"
                             id="end-date"
                             label="Choose End Date"
-                            format="MM/dd/yyyy"
+                            format="yyyy/MM/dd"
                             value={this.state.endDate}
                             onChange={this.handleEndDateChange}
                             KeyboardButtonProps={{
@@ -161,7 +151,7 @@ class Bikes extends Component {
                     {
                         (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
                     }
-                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
+                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate}/>
                 </Grid>
             </div>
         )
