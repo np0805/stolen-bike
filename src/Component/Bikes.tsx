@@ -28,6 +28,7 @@ class Bikes extends Component {
         currentPage: 1,
         itemsPerPage: 10,
         pages: [], 
+        error: false
     }
 
     componentDidMount() {
@@ -59,9 +60,12 @@ class Bikes extends Component {
             .then(res => {
                 this.setLoading(false)
                 // const pages = [...Array(res.data.incidents).keys()]
-                this.setState({titles: res.data.incidents})
+                this.setState({titles: res.data.incidents, error: false})
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                this.setState({error: true})
+                console.log(err)
+            });
         })
     }
 
@@ -146,7 +150,9 @@ class Bikes extends Component {
                     </Grid>
                 </Grid>
                 <Grid>
-                    <SpinLoad loading={this.state.loading} />
+                    {
+                        (this.state.error) ? <div color="red"> Ooops, something went wrong </div>: <SpinLoad loading={this.state.loading} />
+                    }
                     {
                         currentIncident.map((t: any) => (
                             <div key={t.id}>
@@ -155,9 +161,8 @@ class Bikes extends Component {
                         ))
                     }
                     {
-                        (!this.state.titles.length && !this.state.loading)? <div> No result</div>: null
+                        (!this.state.titles.length && !this.state.loading)? <div> No result</div>: <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
                     }
-                    <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
                 </Grid>
             </div>
         )
