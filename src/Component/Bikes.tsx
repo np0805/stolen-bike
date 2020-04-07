@@ -21,11 +21,10 @@ class Bikes extends Component {
         titles: [],
         proximity: 'Berlin',
         startDate: new Date('2019.08.19'),
-        endDate: new Date('2019.08.20'),
+        endDate: new Date(),
         startUnix: '',
         endUnix: '',
         loading: false,
-
         currentPage: 1,
         itemsPerPage: 10,
         pages: [], 
@@ -33,6 +32,8 @@ class Bikes extends Component {
 
     componentDidMount() {
         this.getIncidents()
+        this.handleEndDateChange(this.state.endDate)
+        this.handleStartDateChange(this.state.startDate)
     }
 
     setLoading = (value: boolean) => {
@@ -74,12 +75,16 @@ class Bikes extends Component {
 
     handleStartDateChange = (date: Date | null) => {
         console.log(date)
-        this.setState({startDate: date, startUnix: Date.parse(this.state.startDate.toDateString())/1000})
+        if (date) {
+            this.setState({startDate: date, startUnix: Date.parse(date.toDateString())/1000})
+        }
     }
 
     handleEndDateChange = (date: Date | null) => {
         console.log(date)
-        this.setState({endDate: date, endUnix: Date.parse(this.state.endDate.toDateString())/1000})
+        if (date){
+            this.setState({endDate: date, endUnix: Date.parse(date.toDateString())/1000})
+        } 
     }
 
     handleChange = (e:any) => {
@@ -110,6 +115,7 @@ class Bikes extends Component {
                             label="Choose Start Date"
                             format="yyyy/MM/dd"
                             value={this.state.startDate}
+                            maxDate={this.state.endDate}
                             onChange={this.handleStartDateChange}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -123,6 +129,7 @@ class Bikes extends Component {
                             format="yyyy/MM/dd"
                             value={this.state.endDate}
                             onChange={this.handleEndDateChange}
+                            minDate={this.state.startDate}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
                             }}
