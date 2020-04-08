@@ -21,7 +21,7 @@ export default function Header() {
   return (
     <div className={classes.root}>
         <Grid container>
-            <img src={logo} className={classes.image} />
+            <img src={logo} alt="logo" className={classes.image} />
             <Grid>
                 <Typography variant="h2" gutterBottom>
                     Police Department of Berlin
