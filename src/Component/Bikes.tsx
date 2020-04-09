@@ -5,6 +5,7 @@ import axios from 'axios';
 import IncidentCard from './IncidentCard';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import {
   MuiPickersUtilsProvider,
@@ -103,52 +104,55 @@ class Bikes extends Component {
         return (
             <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-evenly">
-                        <TextField
-                            margin="normal"
-                            name="searchText"
-                            value={this.state.searchText}
-                            onChange={this.handleChange}
-                            placeholder="Search for incidents"
-                        />
-                        <KeyboardDatePicker
-                            disableFuture
-                            margin="normal"
-                            id="start-date"
-                            label="Choose Start Date"
-                            format="yyyy/MM/dd"
-                            value={this.state.startDate}
-                            maxDate={this.state.endDate}
-                            onChange={this.handleStartDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                        <KeyboardDatePicker
-                            disableFuture
-                            margin="normal"
-                            id="end-date"
-                            label="Choose End Date"
-                            format="yyyy/MM/dd"
-                            value={this.state.endDate}
-                            onChange={this.handleEndDateChange}
-                            minDate={this.state.startDate}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                        <Button variant="contained" onClick={this.onTextChange}>Find Cases</Button>
-                    </Grid>
+                        <Grid container justify="space-evenly">
+                            <TextField
+                                margin="normal"
+                                name="searchText"
+                                value={this.state.searchText}
+                                onChange={this.handleChange}
+                                placeholder="Search for incidents"
+                            />
+                            <KeyboardDatePicker
+                                disableFuture
+                                margin="normal"
+                                id="start-date"
+                                label="Choose Start Date"
+                                format="yyyy/MM/dd"
+                                value={this.state.startDate}
+                                maxDate={this.state.endDate}
+                                onChange={this.handleStartDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                            <KeyboardDatePicker
+                                disableFuture
+                                margin="normal"
+                                id="end-date"
+                                label="Choose End Date"
+                                format="yyyy/MM/dd"
+                                value={this.state.endDate}
+                                onChange={this.handleEndDateChange}
+                                minDate={this.state.startDate}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                            <Button variant="contained" color="primary" onClick={this.onTextChange}>Find Cases</Button>
+                        </Grid>
                 </MuiPickersUtilsProvider>
                 <br />
                 <Grid>
-                    <Grid container item justify="flex-end">
-                        <div>
-                            Total : {this.state.titles.length}
-                        </div>
-                    </Grid>
+                    <Container maxWidth="sm">
+                        <Grid container item justify="flex-end">
+                            <div>
+                                Total : {this.state.titles.length}
+                            </div>
+                        </Grid>
+                    </Container>
                 </Grid>
                 <Grid>
+                    <Container maxWidth="md">
                     {
                         (this.state.error) ? <div color="red"> Ooops, something went wrong </div>: <SpinLoad loading={this.state.loading} />
                     }
@@ -162,6 +166,7 @@ class Bikes extends Component {
                     {
                         (!this.state.titles.length && !this.state.loading)? <div> No result</div>: <MakePage itemsPerPage={this.state.itemsPerPage} totalItems={this.state.titles.length} paginate={this.paginate} currentPage={this.state.currentPage}/>
                     }
+                    </Container>
                 </Grid>
             </div>
         )

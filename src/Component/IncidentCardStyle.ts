@@ -11,7 +11,7 @@ const IncidentCardStyles = makeStyles((theme: Theme) =>
       marginTop: 40,
       justifyContent: 'center',
       // marginLeft: '5%',
-      maxWidth: '60%',
+      maxWidth: '100%',
     },
     image: {
       width: 128,
